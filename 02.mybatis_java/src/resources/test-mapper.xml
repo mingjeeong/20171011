@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+				 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="member">
+
+	<resultMap id="memberResult" type="member">
+		<result property="userid" column="userid" />
+		<result property="userpw" column="userpw" />
+		<result property="username" column="username" />
+		<result property="addr" column="address" />
+		<result property="mobile" column="mobile" />
+		<result property="preference" column="preference" />
+	</resultMap>
+
+	<!-- 아이디 찾기 -->
+	<select id="selectid" parameterType="hashmap" resultType="String">
+		select userid from members where username=#{name} and mobile=#{mobile1}
+	</select>
+	
+	<!-- 비밀번호 찾기 -->
+	<select id="selectpw" parameterType="hashmap" resultType="String">
+		select userpw from members where userid=#{userid} and mobile=#{mobile}
+	</select>
+	
+	<!-- 비밀번호 변경 -->
+	<update id="memberupdatepw" parameterType="hashmap" >
+		update members set userpw=#{userpw}  where userid=#{userid}
+	</update>
+	
+	<!-- insert 회원추가-->
+	<insert id="memberInsert" parameterType="member"  >
+		insert into members(userid, userpw, username, ADDRESS, mobile, preference) 
+		values(#{userid}, #{userpw}, #{username}, #{addr}, #{mobile}, #{preference})
+	</insert>
+	
+	<!-- 회원중복조회 -->
+	<select id="isuserid" parameterType="String" resultType="String" >
+		select * from members where userid=#{userid}
+	</select>
+	
+	<!-- 비밀번호 비교  -->
+	<select id="selectPw2" parameterType="String" resultType="String">
+		select userpw from members where userid=#{userid}
+	</select>
+	
+	<!-- select 상세조회 -->
+	<select id="memberselectone" resultMap="memberResult" parameterType="String">
+		select * from members where userid = #{userid}
+	</select>
+	
+	<!-- update 회원 정보변경 -->
+	<update id="memberupdate" parameterType="hashmap">
+		update members set userpw=#{userpw},ADDRESS=#{addr},mobile=#{mobile},preference=#{preference}  
+		where userid=#{userid}
+	</update>
+	
+	<!-- delete 회원 삭제 -->
+	<delete id="memberdelete" parameterType="String">
+		delete from members where userid=#{userid}
+	</delete>
+	
+</mapper>
